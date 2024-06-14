@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Layout, Menu, Button } from 'antd';
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, DesktopOutlined, LogoutOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined, DesktopOutlined, LogoutOutlined, HomeOutlined } from '@ant-design/icons';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;

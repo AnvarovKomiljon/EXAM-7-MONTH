@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Logo from '../../../assets/logo.jpg';
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -26,7 +27,9 @@ const Login = () => {
   };
 
   return (
-    <div style={{ maxWidth: 300, margin: '0 auto', padding: '50px 0' }}>
+    <div className="login-container">
+      <h1>Admin Dashboard Login</h1>
+      <img src={Logo} alt="Logo" className="logo" /> 
       <Form
         name="login"
         initialValues={{
