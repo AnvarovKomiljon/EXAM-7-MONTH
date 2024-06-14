@@ -10,7 +10,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<PrivateRoute><GeneralLayout /></PrivateRoute>}>
-        <Route path="category" element={<Category />} />
+        <Route index element={<Category />} />
         <Route path="product" element={<Product />} />
       </Route>
       <Route path="login" element={<Login />} />
