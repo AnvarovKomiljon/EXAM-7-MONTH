@@ -1,11 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Table, Modal, message } from 'antd';
+import { Table, Button, Modal, message, Form, Input, InputNumber } from 'antd';
 import axios from 'axios';
+import { useForm, Controller } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
+import Joi from 'joi';
 
 const { confirm } = Modal;
 
+const schema = Joi.object({
+  title: Joi.string().required().messages({
+    'string.empty': 'Please input the title!',
+  }),
+  subtitle: Joi.string().required().messages({
+    'string.empty': 'Please input the subtitle!',
+  }),
+  image: Joi.string().uri().required().messages({
+    'string.empty': 'Please input the image URL!',
+    'string.uri': 'Please input a valid URL!',
+  }),
+  description: Joi.string().required().messages({
+    'string.empty': 'Please input the description!',
+  }),
+  rate: Joi.number().required().messages({
+    'number.base': 'Please input a valid rate!',
+  }),
+  price: Joi.number().required().messages({
+    'number.base': 'Please input a valid price!',
+  }),
+  color: Joi.string().required().messages({
+    'string.empty': 'Please input the color!',
+  }),
+  size: Joi.string().required().messages({
+    'string.empty': 'Please input the size!',
+  }),
+});
+
 const ProductPage = () => {
-  const [form] = Form.useForm();
+  const { control, handleSubmit, reset } = useForm({
+    resolver: joiResolver(schema),
+  });
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -40,7 +73,7 @@ const ProductPage = () => {
       });
       message.success('Product created successfully');
       fetchProducts();
-      form.resetFields();
+      reset();
       setIsCreateModalVisible(false);
     } catch (error) {
       message.error('Failed to create product');
@@ -106,7 +139,7 @@ const ProductPage = () => {
       key: 'actions',
       render: (text, record) => (
         <>
-          <Button style={{ marginRight: 8,backgroundColor: 'dodgerblue', color: 'white' }} onClick={() => { setEditingProduct(record); setIsModalVisible(true);  }}>Edit</Button>
+          <Button style={{ marginRight: 8, backgroundColor: 'dodgerblue', color: 'white' }} onClick={() => { setEditingProduct(record); setIsModalVisible(true); }}>Edit</Button>
           <Button onClick={() => showDeleteConfirm(record._id)} danger>Delete</Button>
         </>
       ),
@@ -116,7 +149,7 @@ const ProductPage = () => {
   return (
     <div style={{ padding: 24 }}>
       <Button type="primary" style={{ marginBottom: 10 }} onClick={() => setIsCreateModalVisible(true)}>Create Product</Button>
-      
+
       <Table columns={columns} dataSource={products} rowKey="_id" loading={loading} />
 
       <Modal
@@ -125,30 +158,102 @@ const ProductPage = () => {
         onCancel={() => setIsCreateModalVisible(false)}
         footer={null}
       >
-        <Form form={form} onFinish={handleCreate} layout="vertical">
-          <Form.Item name="title" label="Title" rules={[{ required: true }]}>
-            <Input />
+        <Form onFinish={handleSubmit(handleCreate)} layout="vertical">
+          <Form.Item label="Title" name="title">
+            <Controller
+              name="title"
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Input {...field} />
+                  {error && <p className="error">{error.message}</p>}
+                </>
+              )}
+            />
           </Form.Item>
-          <Form.Item name="subtitle" label="Subtitle" rules={[{ required: true }]}>
-            <Input />
+          <Form.Item label="Subtitle" name="subtitle">
+            <Controller
+              name="subtitle"
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Input {...field} />
+                  {error && <p className="error">{error.message}</p>}
+                </>
+              )}
+            />
           </Form.Item>
-          <Form.Item name="image" label="Image" rules={[{ required: true }]}>
-            <Input />
+          <Form.Item label="Image URL" name="image">
+            <Controller
+              name="image"
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Input {...field} />
+                  {error && <p className="error">{error.message}</p>}
+                </>
+              )}
+            />
           </Form.Item>
-          <Form.Item name="description" label="Description" rules={[{ required: true }]}>
-            <Input />
+          <Form.Item label="Description" name="description">
+            <Controller
+              name="description"
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Input {...field} />
+                  {error && <p className="error">{error.message}</p>}
+                </>
+              )}
+            />
           </Form.Item>
-          <Form.Item name="rate" label="Rate" rules={[{ required: true }]}>
-            <Input type="number" />
+          <Form.Item label="Rate" name="rate">
+            <Controller
+              name="rate"
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <InputNumber {...field} />
+                  {error && <p className="error">{error.message}</p>}
+                </>
+              )}
+            />
           </Form.Item>
-          <Form.Item name="price" label="Price" rules={[{ required: true }]}>
-            <Input type="number" />
+          <Form.Item label="Price" name="price">
+            <Controller
+              name="price"
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <InputNumber {...field} />
+                  {error && <p className="error">{error.message}</p>}
+                </>
+              )}
+            />
           </Form.Item>
-          <Form.Item name="color" label="Color" rules={[{ required: true }]}>
-            <Input />
+          <Form.Item label="Color" name="color">
+            <Controller
+              name="color"
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Input {...field} />
+                  {error && <p className="error">{error.message}</p>}
+                </>
+              )}
+            />
           </Form.Item>
-          <Form.Item name="size" label="Size" rules={[{ required: true }]}>
-            <Input />
+          <Form.Item label="Size" name="size">
+            <Controller
+              name="size"
+              control={control}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <Input {...field} />
+                  {error && <p className="error">{error.message}</p>}
+                </>
+              )}
+            />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={loading}>
@@ -165,34 +270,110 @@ const ProductPage = () => {
         footer={null}
       >
         {editingProduct && (
-          <Form
-            initialValues={editingProduct}
-            onFinish={handleUpdate}
-            layout="vertical"
-          >
-            <Form.Item name="title" label="Title" rules={[{ required: true }]}>
-              <Input />
+          <Form onFinish={handleSubmit(handleUpdate)} layout="vertical">
+            <Form.Item label="Title" name="title" initialValue={editingProduct.title}>
+              <Controller
+                name="title"
+                control={control}
+                defaultValue={editingProduct.title}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <Input {...field} />
+                    {error && <p className="error">{error.message}</p>}
+                  </>
+                )}
+              />
             </Form.Item>
-            <Form.Item name="subtitle" label="Subtitle" rules={[{ required: true }]}>
-              <Input />
+            <Form.Item label="Subtitle" name="subtitle" initialValue={editingProduct.subtitle}>
+              <Controller
+                name="subtitle"
+                control={control}
+                defaultValue={editingProduct.subtitle}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <Input {...field} />
+                    {error && <p className="error">{error.message}</p>}
+                  </>
+                )}
+              />
             </Form.Item>
-            <Form.Item name="image" label="Image" rules={[{ required: true }]}>
-              <Input />
+            <Form.Item label="Image URL" name="image" initialValue={editingProduct.image}>
+              <Controller
+                name="image"
+                control={control}
+                defaultValue={editingProduct.image}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <Input {...field} />
+                    {error && <p className="error">{error.message}</p>}
+                  </>
+                )}
+              />
             </Form.Item>
-            <Form.Item name="description" label="Description" rules={[{ required: true }]}>
-              <Input />
+            <Form.Item label="Description" name="description" initialValue={editingProduct.description}>
+              <Controller
+                name="description"
+                control={control}
+                defaultValue={editingProduct.description}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <Input {...field} />
+                    {error && <p className="error">{error.message}</p>}
+                  </>
+                )}
+              />
             </Form.Item>
-            <Form.Item name="rate" label="Rate" rules={[{ required: true }]}>
-              <Input type="number" />
+            <Form.Item label="Rate" name="rate" initialValue={editingProduct.rate}>
+              <Controller
+                name="rate"
+                control={control}
+                defaultValue={editingProduct.rate}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <InputNumber {...field} />
+                    {error && <p className="error">{error.message}</p>}
+                  </>
+                )}
+              />
             </Form.Item>
-            <Form.Item name="price" label="Price" rules={[{ required: true }]}>
-              <Input type="number" />
+            <Form.Item label="Price" name="price" initialValue={editingProduct.price}>
+              <Controller
+                name="price"
+                control={control}
+                defaultValue={editingProduct.price}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <InputNumber {...field} />
+                    {error && <p className="error">{error.message}</p>}
+                  </>
+                )}
+              />
             </Form.Item>
-            <Form.Item name="color" label="Color" rules={[{ required: true }]}>
-              <Input />
+            <Form.Item label="Color" name="color" initialValue={editingProduct.color}>
+              <Controller
+                name="color"
+                control={control}
+                defaultValue={editingProduct.color}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <Input {...field} />
+                    {error && <p className="error">{error.message}</p>}
+                  </>
+                )}
+              />
             </Form.Item>
-            <Form.Item name="size" label="Size" rules={[{ required: true }]}>
-              <Input />
+            <Form.Item label="Size" name="size" initialValue={editingProduct.size}>
+              <Controller
+                name="size"
+                control={control}
+                defaultValue={editingProduct.size}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <Input {...field} />
+                    {error && <p className="error">{error.message}</p>}
+                  </>
+                )}
+              />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit" loading={loading}>
