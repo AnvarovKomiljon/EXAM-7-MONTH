@@ -24,7 +24,7 @@ const CategoryPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
 
-  const { control, handleSubmit, reset } = useForm({
+  const { control, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: joiResolver(schema),
   });
 
@@ -157,30 +157,25 @@ const CategoryPage = () => {
       </Button>
       <Table columns={columns} dataSource={categories} loading={loading} rowKey="_id" />
 
-      <Modal title={isEditing ? 'Edit Category' : 'Add Category'} visible={isModalVisible} onOk={handleSubmit(onSubmit)} onCancel={handleCancel}>
+      <Modal
+        title={isEditing ? 'Edit Category' : 'Add Category'}
+        visible={isModalVisible}
+        onOk={handleSubmit(onSubmit)}
+        onCancel={handleCancel}
+      >
         <Form layout="vertical">
-          <Form.Item label="Name">
+          <Form.Item label="Name" validateStatus={errors.name ? 'error' : ''} help={errors.name?.message}>
             <Controller
               name="name"
               control={control}
-              render={({ field, fieldState: { error } }) => (
-                <>
-                  <Input {...field} />
-                  {error && <p className="error">{error.message}</p>}
-                </>
-              )}
+              render={({ field }) => <Input {...field} />}
             />
           </Form.Item>
-          <Form.Item label="Image URL">
+          <Form.Item label="Image URL" validateStatus={errors.image ? 'error' : ''} help={errors.image?.message}>
             <Controller
               name="image"
               control={control}
-              render={({ field, fieldState: { error } }) => (
-                <>
-                  <Input {...field} />
-                  {error && <p className="error">{error.message}</p>}
-                </>
-              )}
+              render={({ field }) => <Input {...field} />}
             />
           </Form.Item>
         </Form>
