@@ -138,10 +138,10 @@ const ProductPage = () => {
       title: 'Actions',
       key: 'actions',
       render: (text, record) => (
-        <>
+        <div style={{ display: 'flex' }}>
           <Button style={{ marginRight: 8, backgroundColor: 'dodgerblue', color: 'white' }} onClick={() => { setEditingProduct(record); setIsModalVisible(true); }}>Edit</Button>
-          <Button onClick={() => showDeleteConfirm(record._id)} danger>Delete</Button>
-        </>
+          <Button style={{ backgroundColor: 'red', color: 'white' }} onClick={() => showDeleteConfirm(record._id)} danger>Delete</Button>
+        </div>
       ),
     },
   ];
