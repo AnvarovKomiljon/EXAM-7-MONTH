@@ -6,6 +6,7 @@ import Category from './pages/Category/Category';
 import Product from './pages/Product/Product';
 import Login from './pages/Auth/Login/Login';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
+import Register from './pages/Auth/Register/Register';
 import './App.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/product" element={<Product />} />
       </Route>
       <Route path="/login" element={<Login />} />
+      <Route path='/register' element={<Register />} />
     </Routes>
   );
 }
